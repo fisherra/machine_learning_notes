@@ -1,0 +1,75 @@
+---
+title: "Discriminant Analysis"
+author: "Fisher Ankney"
+output: html_document
+---
+
+```{r, message = F}
+library('tidyverse')
+library('ISLR')
+library('MASS')
+```
+
+<br>
+
+### Linear Discriminant Analysis
+
+fit an lda model using the lda function! same syntax excep the absence of a family option. 
+```{r}
+?lda
+```
+
+<br>
+
+setting up the data into train and test
+
+```{r}
+train <- (Smarket$Year < 2005)
+Smarket_2005 <- Smarket[!train,]
+dir_2005 <- Smarket$Direction[!train]
+```
+
+<br>
+
+fitting an lda model - 
+
+```{r}
+lda_fit <- lda(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
+lda_fit
+```
+
+<br>
+
+this is the computation of the coefficients times each of the training observations - 
+
+```{r}
+plot(lda_fit)
+```
+
+<br> 
+
+Making the prediction - 
+
+```{r}
+lda_pred <- predict(lda_fit, Smarket_2005)
+```
+
+<br> 
+
+Calculating prediction accuracy - 
+
+```{r}
+lda_class <- lda_pred$class
+table(lda_class, dir_2005)
+mean(lda_class == dir_2005)
+```
+
+<br>
+
+That's 56% accuracy in the prediction, which is nearly spot on with the logistic regression prediction accuracy. 
+
+
+<br> 
+
+### Quadratic Discriminant Analysis 
+

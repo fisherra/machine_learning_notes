@@ -1,0 +1,174 @@
+---
+title: "ISLR Chapter 4 Lab"
+output: html_document
+---
+
+### Libraries
+```{r}
+library('tidyverse')
+library('ISLR')
+```
+
+<br>
+
+The dataset we'll use first:
+
+```{r}
+head(Smarket)
+```
+
+<br>
+
+```{r}
+pairs(Smarket)
+```
+
+<br>
+
+```{r}
+cor(Smarket[,-9])
+```
+
+<br>
+
+We can see that volume is increasing over time. 
+
+```{r}
+plot(Smarket$Volume)
+```
+
+<br>
+
+## Logistic Regression
+
+Predicting Direction using Lag1, ..., Lag5 and Volume. 
+
+```{r}
+head(Smarket)
+```
+
+
+```{r}
+logistic_1 <- glm(Direction ~ . - Today - Year, data = Smarket, family = binomial)
+summary(logistic_1)
+```
+
+<br>
+
+Coefficient function -
+
+```{r}
+coef(logistic_1)
+```
+
+<br>
+
+This does the same thing - 
+
+```{r}
+summary(logistic_1)$coefficient[,1]
+```
+
+<br>
+
+Predict function for logistic -
+
+```{r}
+logit_1_prob <- predict(logistic_1, type = 'response')
+logit_1_prob[1:10]
+```
+
+<br>
+
+But which way is 1? up or down?
+
+```{r}
+contrasts(Smarket$Direction)
+```
+
+<br>
+
+In order to turn a prediction into up or down, we'll create those classes corresponding to the probabilities.
+
+```{r}
+logit_1_pred <- rep('Down', 1250)
+logit_1_pred[logit_1_prob > 0.5] = 'Up'
+head(logit_1_pred)
+```
+
+<br> 
+
+### Training and Test Set
+
+```{r}
+train <- (Smarket$Year < 2005)
+Smarket_2005 <- Smarket[!train,]
+dim(Smarket_2005)
+dir_2005 <- Smarket$Direction[!train]
+```
+
+<br>
+
+```{r}
+glm_fits <- glm(Direction ~ . - Today - Year, data = Smarket, family = 'binomial', subset = train)
+
+glm_prob <- predict(glm_fits, Smarket_2005, type = 'response')
+```
+
+<br>
+
+let's see the results
+
+```{r}
+glm_pred <- rep('Down', 252)
+glm_pred[glm_prob > 0.5] <- 'Up'
+
+table(glm_pred, dir_2005)
+mean(glm_pred == dir_2005)
+```
+
+<br>
+
+The above we guess correctly less than 50% of the time, terrible. 
+
+Let's refit the model using only the best predictors. 
+
+```{r}
+glm_fits$coefficients
+```
+
+<br>
+
+```{r}
+glm_fits <- glm(Direction ~ Lag1 + Lag2, data = Smarket, subset = train, family = 'binomial')
+```
+
+<br>
+
+```{r}
+glm_probs <- predict(glm_fits, Smarket_2005, type = 'response')
+
+glm_pred <- rep('Down', 252)
+glm_pred[glm_probs > 0.5] <- 'Up'
+
+table(glm_pred, dir_2005)
+mean(glm_pred == dir_2005)
+```
+
+<br> 
+
+56% of the time we correctly predicted which way the stock market is moving, by taking away variables!
+
+<br> 
+
+Predicting based on a specific value of Lag1 and Lag2
+
+```{r}
+predict(glm_fits, 
+        newdata = data.frame(Lag1 = c(1.2, 1.5), Lag2 = c(1.1, -0.8)),
+        type = 'response')
+```
+
+The prediction is a down market for each o those lags. 
+
+
