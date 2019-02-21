@@ -1,0 +1,118 @@
+---
+title: "ISLR Lab 8"
+output: html_document
+---
+
+<br> 
+
+## Fitting Decision Trees
+
+<br> 
+
+```{r, message = F}
+library('tree')
+library('ISLR')
+```
+
+<br> 
+
+Analyzing the Carseat dataset. Setup -
+
+```{r}
+# first classifier
+High <- ifelse(Carseats$Sales <= 8, 'No', 'Yes')
+head(High)
+```
+
+<br> 
+
+Add this to the Carseat data.frame - 
+```{r}
+Carseats <- data.frame(Carseats, High)
+head(Carseats)
+```
+
+<br> 
+
+Now use the tree function to predict the value of high, without the use of sales. The syntax is similiar to lm(). 
+
+```{r}
+tree_cs <- tree(High ~ . - Sales, data = Carseats)
+tree_cs
+```
+
+<br> 
+
+Summary - 
+```{r}
+summary(tree_cs)
+```
+
+<br> 
+
+PLot - 
+```{r}
+plot(tree_cs)
+text(tree_cs)
+```
+
+<br> 
+
+<br> 
+
+Let's test out the classification tree on a test set
+
+```{r}
+# for reproducability
+set.seed(2)
+
+# create indicies by random selection 
+train_ind <- sample(nrow(Carseats), 300)
+
+# create test set
+test <- Carseats[-train_ind, ]
+```
+
+<br>
+
+Create the classification tree - 
+```{r}
+tree_cs <- tree(High ~ . -Sales, data = Carseats, subset = train_ind)
+```
+
+<br> 
+
+Make predictions to compare to the test set - 
+```{r}
+tree_pred <- predict(tree_cs, test, type = 'class')
+```
+
+<br> 
+
+Compare prediction to real values set aside in the test set
+```{r}
+table(tree_pred, test$High)
+```
+
+<br> 
+
+Correct classifications / Total Classifications = Test accuracy rate
+
+```{r}
+(50 + 32) / 100
+```
+
+<br> 
+
+
+Now we may consider whether pruning the tree will lead to beter results or not. Use `cv.tree()` to determine optimal level of tree complexity. 
+
+<br> 
+
+```{r}
+set.seed(3)
+tree_cs
+cv_carseats <- cv.tree(tree_cs, fun = prune.misclass)
+```
+
+

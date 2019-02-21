@@ -1,0 +1,86 @@
+---
+title: "K-Nearest Neighbors"
+author: "Fisher Ankney"
+output: html_document
+---
+
+```{r}
+library('tidyverse')
+library('ISLR')
+library('class')
+```
+
+```{r}
+?knn
+```
+
+Requires 4 inputs - 
+
+- train: a matrix containing the predictors associated with training data
+- test: a matrix containing the predictors we want to make prediction upon
+- cl: a vector containing the class labels for training observations (train.Direction)
+- K: the number of nearest neighbors to be used
+
+<br>
+
+According to the above requirements, we want Lag1 and Lag2 of the Smarket dataset to share a matrix for training and a matrix for testing. 
+
+first we'll make the training data - 
+
+```{r}
+train <- (Smarket$Year < 2005)
+Smarket_2005 <- Smarket[!train,]
+dir_2005 <- Smarket$Direction[!train]
+```
+
+
+<br> 
+
+Now we can make the matrix inputs and an associated training direction object - 
+
+```{r}
+train_x <- cbind(Smarket$Lag1, Smarket$Lag2)[train, ]
+test_x <- cbind(Smarket$Lag1, Smarket$Lag2)[!train, ]
+
+train_dir <- Smarket$Direction[train]
+```
+
+<br> 
+
+Knn uses an element of randomness to break ties in lengths, set a seed before conducting
+
+```{r}
+set.seed(2)
+
+knn_pred <- knn(train_x, test_x, train_dir, k = 1)
+table(knn_pred, dir_2005)
+mean(knn_pred == dir_2005)
+
+```
+
+<br> 
+
+automate finding the best k - 
+
+```{r}
+outputs <- vector('double', length = 50)
+
+
+for (i in 1:50) {
+  knn_pred <- knn(train_x, test_x, train_dir, k = i)
+  outputs[i] <- mean(knn_pred == dir_2005)
+  i <- i + 1
+}
+
+which.max(outputs)
+```
+
+<br> 
+
+```{r}
+knn_pred <- knn(train_x, test_x, train_dir, k = 3)
+mean(knn_pred == dir_2005)
+```
+
+53% accuracy with the best K. 
+

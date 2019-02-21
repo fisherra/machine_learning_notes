@@ -73,3 +73,50 @@ That's 56% accuracy in the prediction, which is nearly spot on with the logistic
 
 ### Quadratic Discriminant Analysis 
 
+<br> 
+
+```{r}
+?qda
+```
+
+<br>
+
+No wonder these predictions are terrible, we're trying to group this: 
+
+```{r}
+ggplot(Smarket) + 
+  geom_point(aes(x = Lag1, y = Lag2, color = Direction))
+```
+
+<br> 
+
+Create the model - 
+
+```{r}
+qda_fit <- qda(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
+qda_fit
+```
+
+<br> 
+
+Create the prediction - 
+
+```{r}
+qda_pred <- predict(qda_fit, Smarket_2005)
+class <- qda_pred$class
+```
+
+<br>
+
+Check validity - 
+
+```{r}
+table(class, dir_2005)
+mean(class == dir_2005)
+```
+
+<br>
+
+wow, 60% accuracy.
+
+
