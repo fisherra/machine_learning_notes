@@ -1,0 +1,42 @@
+---
+title: 'Coefficient Of Determination'
+output: html_document
+---
+
+## Meaning
+
+proportion of variance in the response explained by the model 
+
+$$R^2 = \frac{Var{\hat{y}}}{Var{y}}$$
+
+(these are sample variances)
+
+a measure of usefulness of a model, along with RSE. we aim to maximize R^2 or explain the most we can with our predictor. Minimize the role that the error term plays. 
+
+<br> 
+
+Correlation coefficient squared
+
+<br>
+
+$$R^2 = \frac{ss_{regression}}{ss_{total}} $$
+
+<br> 
+
+R^2 is always between 0 and 1. 0 means no fit what-so-ever. or none of the variation in points is explained by the model. 1 is perfect fit, all of the y is explained by the x model. 
+
+R^2 does not tell you anything about the model assumptions being met, for more read about linear model assumptions (here). 
+
+<br> 
+
+## Misconceptions
+
+Low R squared or R^2 of zero doesn't mean they're not related. Just like r, it's a measure of linear relation. 
+
+R^2 does not account for confounding variables, be hesitant in calling y dependent on x, and not both being dependent on some, un-modelled z. 
+
+Overfitting causes an R^2 to rise on a training model, but may cause problems for future data points. 
+
+
+
+

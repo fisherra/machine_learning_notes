@@ -1,0 +1,32 @@
+---
+title: 'Hypothesis Testing Linear Models'
+output: html_document
+---
+
+```{r}
+set.seed(10)
+
+# create data
+x <- rnorm(100, mean = 60, sd = 20)
+eps <- rnorm(100, mean = 0, sd = 25)
+y <- 2*x + 1 + eps
+
+# create model
+model <- lm(y ~ x)
+
+# summarize model 
+summary(model)
+```
+
+## t value interpretation
+
+## F statistic interpretation
+
+## What about not zero?
+
+```{r}
+confint(model)
+```
+
+see confidence intervals for more info (link)
+

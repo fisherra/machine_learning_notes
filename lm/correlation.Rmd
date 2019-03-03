@@ -1,0 +1,78 @@
+---
+title: 'Linear Dependence'
+output: html_document
+---
+
+## Covariance 
+
+$\sigma_{xy}$ is covariance
+
+$\sigma_{xy} = E(XY) - E(X)E(Y)$
+
+Covariance is the measure indicating the extent that two variables change in tandem. not bounded by any numbers, can be positive or negative. 
+
+Linear relationship.
+
+changes in scale effect covariance
+
+
+```{r, eval = F}
+cov(x,y)
+```
+
+<br> 
+
+## Correlation
+
+
+Correlation is $r$
+
+scaled measurement of how strong a two variables linear relationship is. 
+
+$-1 < r < 1$
+
+where perfect linear negative correlation = -1 and perfect linear positive correlation = 1, absolutely linearly uncorrelated = 0. 
+
+$r = \frac{\sigma_{xy}}{\sigma_x \sigma_y}$
+
+<br> 
+
+Dependent on covariance, but scaled by individual variances. 
+
+To test correlation use: 
+
+```{r, eval = F}
+cor.test(x,y)
+```
+
+<br> 
+
+## Importance of Visualization
+
+insert anscombs quartet
+
+<br> 
+
+## Interpretation
+
+perfect postive linear relationship
+
+good positive linear relationship
+
+poor positive linear relationship
+
+good linear relationship
+
+correlation of zero doesn't mean uncorrleated, just linearly uncorrelated
+
+independent does mean correlation of zero
+
+<br> 
+
+## Related Concepts
+
+basis of R squared (link)
+
+
+
+

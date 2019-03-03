@@ -1,0 +1,6 @@
+---
+title: 'Residuals'
+output: html_document
+---
+
+RSS and RSE, SS total, sigma hat, how they all relate

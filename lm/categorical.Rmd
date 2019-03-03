@@ -1,0 +1,75 @@
+---
+title: 'Categorical Variable Regression'
+output: html_document
+---
+
+
+When one or more of your preditors is categorical, instead of continuous, make use of dummy variable. 
+
+<br> 
+
+## Single Predictor
+
+simple case, you have to predict height based on gender. 
+
+```{r}
+gender <- c(rep('m', 50), rep('f', 50))
+height <- c(rnorm(50, mean = 125, sd = 10), rnorm(50, mean = 100, sd = 10))
+```
+
+<br>
+
+turn your predictor categorical
+
+```{r}
+gender <- as.factor(gender)
+```
+
+<br> 
+
+```{r}
+
+boxplot(height ~ gender)
+
+model <- lm(height ~ gender)
+
+```
+
+<br> 
+
+```{r}
+model <- lm(height ~ gender)
+summary(model)
+```
+
+$\beta_1$ coefficient, genderm, is the difference between gender male and gender female. this case it is 23, the model was actually 25. 
+
+
+intercept is the average height of the reference category, gender female. 
+
+intercept + beta_1 is the average height of the secondary category, x = 1, male. 
+
+our dummy variable is x = 0 female, x = 1 male, as seen here
+
+```{r}
+contrasts(gender)
+```
+
+<br> 
+
+## Multiple Predictors
+
+one of the predictors is categorical
+
+very similiar interpretation
+
+<br> 
+
+## Multipe Categories 
+
+need t-1 dummy variables, can't have x = 0, x = 1, x = 2. that emplies an interval relationship. we want categorical. 
+
+
+
+
+

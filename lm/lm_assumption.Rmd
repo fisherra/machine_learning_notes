@@ -1,0 +1,58 @@
+---
+title: 'Linear Model Assumptions'
+output: html_document
+---
+
+Assumptions to be met to properly use a linear model: 
+
+<br> 
+
+1. Y is continuous
+
+y is assumed to be continuous.  with very large y, discrete functions basically become continuous. 
+
+Example of Violation: Y = number of coin's flipped as head
+
+How to Test: Self Evident
+
+<br>
+
+2. data points (errors) are independent
+
+the position of one x value does not affect the position of another.
+
+Example of Violation: usually violated by relationships in time or space. 
+
+How to Test: understand experiment design
+
+
+<br> 
+
+3. X and Y are not intertwined
+
+Y is not a direct function of x, relates to point 1. 
+
+Example of Violation: X = weight, Y = BMI
+
+How to Test: Self Evident
+
+<br>
+
+4. error is normally distributed
+
+Example of violation: ??
+
+How to Test: Plot residuals, look for pattern
+
+<br> 
+
+5. Data is homoscedastic
+
+How to test: plot residuals, look for pattern
+
+<br> 
+
+
+
+
+

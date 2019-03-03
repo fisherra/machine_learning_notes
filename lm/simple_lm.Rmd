@@ -1,0 +1,166 @@
+---
+title: 'Simple Linear Regression'
+output: html_document
+---
+
+## Mathematical Model 
+
+Once you've decided that theres a linear correlation between two data points (link), a simple linear regression model could work. 
+
+<br> 
+
+Prediction of one variable from knowledege of another. 
+
+Assuming a simple linear relationship between two variables, there exists a relationship of this form: 
+
+$$ y = \beta_0 + \beta_1 x_1 + \epsilon $$
+
+Where: 
+
+$y$: the predicted variable 
+
+$\beta_0$: the y-intercept 
+
+$\beta_1$: the slope of x_1 
+
+$x_1$: the predicting variable
+
+$\epsilon$: the error term  
+
+
+<br> 
+
+we estimate this relationship with the model:
+
+Mathematical Model: 
+
+$$ \hat{y} = \hat{\beta_0} + \hat{\beta_1} x_1 $$
+
+Where
+
+$\hat{y}$ the estimated value of the dependent, predicted variable
+
+$\hat{\beta_0}$ the estimate value of the y-intercept
+
+$\hat{\beta_1}$ the estimate value of the slope, or x coefficient
+
+$x_1$ the independent, or predictor variable 
+
+
+<br> 
+
+Relies on assumptions, found in this post (link). 
+
+<br> 
+
+
+## Simulating Data
+
+```{r}
+library(tidyverse)
+set.seed(10)
+
+# create data
+x <- rnorm(100, mean = 60, sd = 20)
+eps <- rnorm(100, mean = 0, sd = 25)
+y <- 2*x + 1 + eps
+
+# plot data with true model
+ggplot() + 
+  geom_point(aes(y = y, x = x), color = 'darkblue') + 
+  theme_minimal() +
+  ggtitle('Generated Data')
+```
+
+<br> 
+
+## True Relationship
+
+```{r}
+# fitting the true line
+ggplot() + 
+  geom_point(aes(y = y, x = x), color = 'darkblue') + 
+  geom_line(aes(y = 2*x + 1, x = x), 
+            size = 1.25, color = 'darkblue') + 
+  theme_minimal() +
+  ggtitle('True Regression Line')
+```
+
+
+<br> 
+
+## Simple Linear Regression Model 
+
+```{r}
+sim_dat <- tibble(x = x, y = y)
+
+fit <- lm(y ~ x, data = sim_dat)
+
+sim_dat %>% 
+  mutate( model = predict(fit) ) %>%
+  ggplot() + 
+  geom_point(aes(y = y, x = x), color = 'darkblue') + 
+  geom_line(aes(y = 2*x +1, x = x), 
+            size = 1.25, color = 'darkblue') + 
+  geom_line(aes(y = model, x = x), 
+            size = 1.25, color = 'firebrick') + 
+  theme_minimal() +
+  ggtitle('True Line & Regression Model')
+```
+
+<br> 
+
+## Interpretation
+
+<br> 
+
+```{r}
+summary(fit)
+```
+
+<br> 
+
+
+The real relationship was y = 2x + 1 
+
+meaning: 
+
+$\beta_0 = 1$
+
+$\beta_1 = 2$
+
+and we set the error term with 
+
+```{r, eval = F}
+eps = rnorm(100, mean = 0, sd = 25)
+```
+
+Meaning we wanted random normal error, that centered at the x value, with a standard deviation of 25. 
+
+<br> 
+
+Our model supposes the relationship is y = 1.92 x + 2.9
+
+Meaning:
+
+$\hat{\beta_0}$: 2.9
+
+$\hat{\beta_1}$: 1.92
+
+<br> 
+
+
+It did a good job in following the true regression line as seen in the comparison plot. 
+
+<br> 
+
+## Related Concepts
+
+To learn more about specific interpretation, follow the link you wish: 
+
+- Residual Squared Error (RSE) 
+- R Squared
+- Hypothesis Testing Linear Models
+
+
+

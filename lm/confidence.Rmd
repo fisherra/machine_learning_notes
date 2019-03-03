@@ -1,0 +1,32 @@
+---
+title: 'Intervals and Bands'
+output: html_document
+---
+
+## interval estimate of parameter
+
+<br>
+
+## CI of B_1 
+
+cool figure
+
+it's the confidence interval, or the range of hat-beta_1 that's changing. the true beta_1 is constant. 
+
+
+see t-test
+
+<br> 
+
+## confidence band
+
+
+<br>
+
+## prediction band
+
+
+<br> 
+
+## Simultaneous correction
+
