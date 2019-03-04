@@ -3,4 +3,51 @@ title: 'Residuals'
 output: html_document
 ---
 
-RSS and RSE, SS total, sigma hat, how they all relate
+RSS and R
+
+
+SE, SS total, sigma hat, how they all relate
+
+How do all of these things relate?
+
+residual sum of squares - sum of the absolute values of the errors from the model
+RSS
+
+minimize RSS with a cost or loss function
+
+RSS is also called the sum of squares residual SS_residual
+
+
+---- 
+
+
+Residual Standard Error - RSE - sqrt(RSS / n - 2)
+this is an estimate of sigma
+
+
+```{r}
+library('tidyverse')
+set.seed(10)
+
+# create data
+x <- rnorm(100, mean = 60, sd = 20)
+eps <- rnorm(100, mean = 0, sd = 25)
+y <- 2*x + 1 + eps
+
+# model 
+
+fit <- lm(y~x) 
+summary(fit)
+confint(fit)
+anova(fit)
+```
+
+
+RSE = 24.32 = sqrt(MSE residual)
+SD of data, as described by the SD of epsilon = 25
+
+
+```{r}
+sqrt(591)
+```
+

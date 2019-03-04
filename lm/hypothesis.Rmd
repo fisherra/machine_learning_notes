@@ -20,13 +20,46 @@ summary(model)
 
 ## t value interpretation
 
+```{r}
+summary(model)$coefficients
+```
+
+<br> 
+
+t-value is a test statistic, or location on the t-distrubiton. the closer ot is to zero, the more likely that it is to occur, and this a higher p-value. Y intercept is almost 0, p-value of .71. we certainly cannot reject H_o : beta_0 = 0. 
+
+
+how about H_o Beta_1 = 0? well our test statistic is 14.8! thats huge on the t-distribution. an extremely unlikely case if the beta were to be zero. the pvalue agrees, giving 8.76x10^-27. reject H_o, beta_1 =/= 0. Meaning, there is a statistically significant relationship between the predictor and the predicted. 
+
+
+
 ## F statistic interpretation
 
-## What about not zero?
+Here's the f value
+
+```{r}
+summary(model)$f
+```
+
+not sure how to pull the p-value associated with the oerall f test though. 
+
+```{r}
+summary(model)
+```
+
+basically is your model better than just using the mean? 
+
+
+<br> 
+
+
+## What about testing beta against not zero
 
 ```{r}
 confint(model)
 ```
+
+is whatever value you're testing against in this interval? 
 
 see confidence intervals for more info (link)
 

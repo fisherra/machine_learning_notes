@@ -1,32 +1,150 @@
 ---
-title: 'Intervals and Bands'
+title: 'Confidence Intervals'
 output: html_document
 ---
 
-## interval estimate of parameter
+## Set Up
 
-<br>
+```{r, message = F}
+library('tidyverse')
+set.seed(9)
 
-## CI of B_1 
+# generate data
+x <- sample(1:100, replace = T)
+eps <- rnorm(100, 0, 35)
+y <- 3 * x + 1 + eps 
 
-cool figure
+# create slr
+fit <- lm(y ~ x)
 
-it's the confidence interval, or the range of hat-beta_1 that's changing. the true beta_1 is constant. 
-
-
-see t-test
+# plot
+plot(y ~ x, col = 'firebrick') # points
+lines(abline(1,3, col = 'firebrick', lwd = 2)) # actual
+lines(abline(fit, col = 'slateblue', lwd = 2)) # model
+```
 
 <br> 
 
-## confidence band
+## Confidence Interval of Coefficients
+
+```{r}
+confint(fit)
+```
+
+2.5% and 97.5% are percentiles, meaning 95% is between these two values. Intercept is $\beta_0$, x coefficient is $\beta_1$. in this case, $\beta_1$ is not inside the confidence interval. 
+
+<br> 
+
+## Testing the 95% CI
+
+it's the interval that has a random component, not beta_1. to prove this, lets generate 100 models of the data. Beta 1 remains to be 3 for each model. the samples change, thus the beta_1 hat estimator changes, and corresponding confidence interval changes. 
+
+<br> 
+
+```{r}
+beta_low <- vector('double', length = 100)
+beta_high <- vector('double', length = 100)
+
+for(i in 1:100) {
+  
+  set.seed(i+100)
+  
+  x <- sample(1:100, replace = T)
+  eps <- rnorm(100, 0, 35)
+  y <- 3 * x + 1 + eps 
+  
+  fit <- lm(y ~ x)
+  
+  beta_low[i] <- confint(fit)[2,1]
+  beta_high[i] <- confint(fit)[2,2]
+  
+  i <- i + 1
+}
+
+dat <- data.frame(low = beta_low, high = beta_high, index = 1:100)
+
+ggplot(dat) + 
+    geom_segment(aes(y = 3, yend = 3, x = 0, xend = 100)) + 
+    geom_segment(aes(x = 1:100, y=low[1:100], yend = high[1:100], xend = 1:100)) +
+    theme_minimal()
+```
+
+<br> 
 
 
-<br>
+## Confidence Band
+
+A confidence band tells us that the average value for a prediction will be within the lower and upper limits 95% of the time. That is' the model itself will be between those two values. 
+
+<br> 
+
+```{r}
+# create the bands
+sample <- data.frame(y = y, x = x, interval = 1:100)
+
+fit <- lm(y ~ x, data = sample)
+
+sample$CI <- predict(fit, interval = 'confidence', newdata = data.frame(interval = 1:100))
+
+ggplot(sample) + 
+  geom_point(aes(y=y, x=x)) + 
+  geom_line(aes(x = 1:100, y = sample$CI[,2]))
+
+
+sample$CI[,2]
+```
+
+
+```{r}
+sample$CI
+ggplot(sample, aes(y = y, x = x)) + 
+  geom_point() + 
+  stat_smooth(method = 'lm', level = 0.95)
+
+?stat_smooth
+
+
+
+dat$low_ci 
+dat$low_ci <- predict(fit, newdata = , 
+                        interval = "confidence", 
+                        level = 0.9)[, 2]
+nd1_eng$HiCI <- predict(mod1, newdata = nd1_eng, 
+                        interval = "confidence", 
+                        level = 0.9)[, 3]
+
+source <- data.frame(y = y, x = x)
+predict(fit)
+
+ggplot() + 
+  geom_point(aes(y = y, x = x)) + 
+  geom_line(aes(y = dat$high, x = dat$index)) + 
+  theme_minimal()
+```
+
+
+```{r, eval = F}
+predict(interval = 'confidence')
+```
+
+
+
+
+
 
 ## prediction band
 
+Says that the data points will be between the lower and upper limit. 
+
+
+```{r, eval = F}
+predict(interval = 'prediction')
+```
 
 <br> 
 
 ## Simultaneous correction
+
+Bonferroni 
+
 
